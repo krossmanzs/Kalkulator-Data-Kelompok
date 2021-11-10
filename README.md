@@ -12,6 +12,12 @@ Sebuah kalkulator untuk menghitung mean, modus, dan median dari sebuah tabel dis
 
 * Menghitung mean, median, dan modus
 
+## TO-DO
+- [x] Membuat aplikasi kalkulator data kelompok
+- [ ] Menghitung kuartil, desil, dan persentil
+- [ ] Fitur save
+- [ ] Fitur history
+
 ## Kontribusi
 Karena saya baru pertama kali memakai github :v
 
