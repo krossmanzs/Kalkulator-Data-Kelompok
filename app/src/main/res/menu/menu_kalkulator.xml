@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/clear_table"
+        android:orderInCategory="100"
+        android:title="@string/bersihkan_tabel"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/save_table"
+        android:icon="@drawable/ic_baseline_save_24"
+        app:showAsAction="always"
+        android:title="@string/save" />
+</menu>
