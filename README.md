@@ -21,6 +21,7 @@ Sebuah kalkulator untuk menghitung mean, modus, dan median dari sebuah tabel dis
 - [ ] Menghitung kuartil, desil, dan persentil
 - [ ] Fitur save
 - [ ] Fitur history
+- [ ] Implementasi unit test
 
 ## Kontribusi
 Karena saya baru pertama kali memakai github :v
