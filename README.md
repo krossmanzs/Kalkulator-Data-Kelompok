@@ -1,6 +1,6 @@
 # Kalkulator Data Kelompok
 
-Sebuah kalkulator untuk menghitung mean, modus, dan median dari sebuah tabel distribusi frekuensi.
+Sebuah kalkulator berbasis Android untuk menghitung mean, modus, dan median dari sebuah tabel distribusi frekuensi.
 
 ## Language
 * Bahasa Indonesia
