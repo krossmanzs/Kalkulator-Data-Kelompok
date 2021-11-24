@@ -1,6 +1,11 @@
 package clnx.kalkulatordatakelompok.ui.kalkulator.operation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import clnx.kalkulatordatakelompok.ui.kalkulator.DataModel;
+import clnx.kalkulatordatakelompok.util.Utility;
 
 public class Operation {
     /**
@@ -121,22 +126,8 @@ public class Operation {
      */
     public static float hitungKuartil(int quartil, float tb,
                                       float n, float fk, float fi, float p) {
-        float jumlahFrek = 0f;
 
-        switch (quartil) {
-            case 1:
-                jumlahFrek = (1f/4f)/(float) n;
-                break;
-            case 2:
-                jumlahFrek = (2f/4f)/(float) n;
-                break;
-            case 3:
-                jumlahFrek = (3f/4f)/(float) n;
-                break;
-            case 4:
-                jumlahFrek = (1.0f)/(float) n;
-                break;
-        }
+        final float jumlahFrek = ((float) quartil / 4f) * n;
 
         return tb + ((jumlahFrek - fk) / fi) * p;
     }
@@ -198,5 +189,29 @@ public class Operation {
         }
 
         return tb + ((jumlahFrek - fk) / fi) * p;
+    }
+
+    public static Map<String,Float> getDatakelasKuartil(DataModel dataModel, int kuartil) {
+        // tb kelas kuartil
+        // 1/4n
+        // frek kumulatif sebelum kelas kuartil
+        // panjang kelas
+
+        final Map<String,Float> dataKelasKuartil = new HashMap<>();
+
+        float n = dataModel.getFk(dataModel.getBaris()); // mendapatkan jumlah frekuensi
+        final float jumlahFrek = ((float) kuartil / 4f) * n;
+
+        for (int i = 1; i <= dataModel.getBaris(); i++) {
+            if (dataModel.getFk(i) >= jumlahFrek) {
+                dataKelasKuartil.put("tb",dataModel.getNilaiKiri(i) - 0.5f);
+                dataKelasKuartil.put("fk",dataModel.getFk(i-1));
+                dataKelasKuartil.put("fi",dataModel.getFrekuensi(i));
+                dataKelasKuartil.put("panjang",dataModel.getNilaiKanan(i) - dataModel.getNilaiKiri(i) + 1 );
+                break;
+            }
+        }
+
+        return dataKelasKuartil;
     }
 }
