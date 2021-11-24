@@ -99,4 +99,104 @@ public class Operation {
     public static float hitungModus(float tb, float d1, float d2, float p) {
         return tb + (d1/(d1+d2)) * p;
     }
+
+    /**
+     * Metode ini berfungsi untuk menghitung nilai kuartil 1 - 4.
+     * Rumus:
+     *
+     *                              1
+     *                             --- n - fk
+     *                              4
+     *          quartil(1) = Tb + ----------- x p
+     *                                fi
+     *
+     *
+     * @param quartil untuk menentukan kuartil ke-berapa
+     * @param tb tepi bawah
+     * @param n jumlah frekuensi
+     * @param fk frekuensi kumulatif sebelum kelas quartil
+     * @param fi frekuensi pada kelas quartil
+     * @param p panjang kelas
+     * @return hasil nilai quartil ke berapa dari yang ditentukan
+     */
+    public static float hitungKuartil(int quartil, float tb,
+                                      float n, float fk, float fi, float p) {
+        float jumlahFrek = 0f;
+
+        switch (quartil) {
+            case 1:
+                jumlahFrek = (1f/4f)/(float) n;
+                break;
+            case 2:
+                jumlahFrek = (2f/4f)/(float) n;
+                break;
+            case 3:
+                jumlahFrek = (3f/4f)/(float) n;
+                break;
+            case 4:
+                jumlahFrek = (1.0f)/(float) n;
+                break;
+        }
+
+        return tb + ((jumlahFrek - fk) / fi) * p;
+    }
+
+    /**
+     * Metode ini berfungsi untuk menghitung nilai kuartil 1 - 4.
+     * Rumus:
+     *
+     *                              1
+     *                             --- n - fk
+     *                              4
+     *          quartil(1) = Tb + ----------- x p
+     *                                fi
+     *
+     *
+     * @param desil untuk menentukan desil ke-berapa
+     * @param tb tepi bawah
+     * @param n jumlah frekuensi
+     * @param fk frekuensi kumulatif sebelum kelas desil
+     * @param fi frekuensi pada kelas desil
+     * @param p panjang kelas
+     * @return hasil perhitungan desil ke berapa dari yang sudah ditentukan
+     */
+    public static float hitungDesil(int desil, float tb,
+                                      float n, float fk, float fi, float p) {
+        float jumlahFrek = 0f;
+
+        switch (desil) {
+            case 1:
+                jumlahFrek = (1f/10f)/(float) n;
+                break;
+            case 2:
+                jumlahFrek = (2f/10f)/(float) n;
+                break;
+            case 3:
+                jumlahFrek = (3f/10f)/(float) n;
+                break;
+            case 4:
+                jumlahFrek = (4f/10f)/(float) n;
+                break;
+            case 5:
+                jumlahFrek = (5f/10f)/(float) n;
+                break;
+            case 6:
+                jumlahFrek = (6f/10f)/(float) n;
+                break;
+            case 7:
+                jumlahFrek = (7f/10f)/(float) n;
+                break;
+            case 8:
+                jumlahFrek = (8f/10f)/(float) n;
+                break;
+            case 9:
+                jumlahFrek = (9f/10f)/(float) n;
+                break;
+            case 10:
+                jumlahFrek = (1.0f)/(float) n;
+                break;
+        }
+
+        return tb + ((jumlahFrek - fk) / fi) * p;
+    }
 }
