@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Menu;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -22,6 +21,7 @@ import clnx.kalkulatordatakelompok.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final String DONATE_URL = "https://saweria.co/krossmanzs";
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
@@ -56,9 +56,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.donasi) {
-            String url = "https://saweria.co/krossmanzs";
             Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(url));
+            i.setData(Uri.parse(DONATE_URL));
             startActivity(i);
             return true;
         }
