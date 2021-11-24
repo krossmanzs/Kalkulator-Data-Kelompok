@@ -192,10 +192,6 @@ public class Operation {
     }
 
     public static Map<String,Float> getDatakelasKuartil(DataModel dataModel, int kuartil) {
-        // tb kelas kuartil
-        // 1/4n
-        // frek kumulatif sebelum kelas kuartil
-        // panjang kelas
 
         final Map<String,Float> dataKelasKuartil = new HashMap<>();
 
