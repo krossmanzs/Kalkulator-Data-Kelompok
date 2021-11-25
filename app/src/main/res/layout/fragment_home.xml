@@ -147,9 +147,9 @@
         android:layout_above="@id/linear"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="10dp"
         android:background="@drawable/border_blue"
         android:orientation="vertical"
         android:padding="8dp">
@@ -159,22 +159,23 @@
             android:layout_height="wrap_content"
             android:gravity="fill_horizontal"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:layout_weight="1"
                 android:text="@string/hasil_perhitungan"
                 android:textSize="@dimen/text_header"
-                android:layout_weight="1"
                 android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/imgMore"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_baseline_more_horiz_24"
                 android:layout_gravity="end"
-                android:contentDescription="More Result" />
+                android:contentDescription="More Result"
+                android:src="@drawable/ic_baseline_more_horiz_24" />
         </LinearLayout>
 
         <ScrollView
@@ -248,8 +249,6 @@
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
-
-
         </ScrollView>
 
     </LinearLayout>
@@ -258,12 +257,12 @@
         android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/border"
         android:gravity="center"
