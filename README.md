@@ -18,10 +18,11 @@ Sebuah aplikasi kalkulator berbasis Android untuk menghitung mean, modus, dan me
 
 ## TO-DO
 - [x] Membuat aplikasi kalkulator data kelompok
-- [ ] Menghitung kuartil, desil, dan persentil
+- [x] Menghitung kuartil, desil, dan persentil
 - [ ] Fitur save
 - [ ] Fitur history
 - [ ] Implementasi unit test
+- [ ] Percantik UI :(
 
 ## Kontribusi
 Karena saya baru pertama kali memakai github :v
