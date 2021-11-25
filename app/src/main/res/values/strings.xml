@@ -31,7 +31,11 @@
     <string name="rata_rata">Rata-Rata \t=</string>
     <string name="median">Median \t\t\t=</string>
     <string name="modus">Modus \t\t\t\t=</string>
+    <string name="kuartil1">Q1 \t\t\t\t\t\t\t\t=</string>
+    <string name="kuartil2">Q2 \t\t\t\t\t\t\t\t=</string>
+    <string name="kuartil3">Q3 \t\t\t\t\t\t\t\t=</string>
+    <string name="desil">Desil \t\t\t\t\t\t=</string>
+    <string name="persentil">Persentil \t\t=</string>
     <string name="noResult">-</string>
-
 
 </resources>

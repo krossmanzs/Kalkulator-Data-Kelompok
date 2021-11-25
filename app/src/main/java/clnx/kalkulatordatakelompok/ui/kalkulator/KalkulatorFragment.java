@@ -1,18 +1,24 @@
 package clnx.kalkulatordatakelompok.ui.kalkulator;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Selection;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -22,10 +28,13 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import clnx.kalkulatordatakelompok.R;
 import clnx.kalkulatordatakelompok.databinding.FragmentHomeBinding;
 import clnx.kalkulatordatakelompok.ui.helper.ErrorMsg;
+import clnx.kalkulatordatakelompok.ui.helper.ShowMessage;
 import clnx.kalkulatordatakelompok.ui.kalkulator.operation.Operation;
 import clnx.kalkulatordatakelompok.util.Utility;
 
@@ -36,13 +45,17 @@ public class KalkulatorFragment extends Fragment {
     private TableLayout tlDisFre;
     private EditText etKiri, etKanan, etFrekuensi;
     private TextView txtMean, txtMedian, txtModus;
+
     private float jumlahFrekuensi;
     private float jumlahFiXiXs;
     private float jumlahFiXi;
-
-    private float nilaiKiri;
-    private float nilaiKanan;
     private float frekuensi;
+
+    private float mean = 0f,
+            median = 0f,
+            modus = 0f;
+
+    final private ArrayList<Float> kuartil = new ArrayList<>();
 
     private float fk, tepiBawah, tepiAtas, xi, xiMinusXs, fiXiXs, fiTimesXi, xs;
 
@@ -57,6 +70,7 @@ public class KalkulatorFragment extends Fragment {
         dataModel = new DataModel();
 
         final Button btnAdd = binding.btnAdd;
+        final ImageView imgMore = binding.imgMore;
         txtMean = binding.txtMean;
         txtMedian = binding.txtMedian;
         txtModus = binding.txtModus;
@@ -64,6 +78,78 @@ public class KalkulatorFragment extends Fragment {
         etKiri = binding.etKiri;
         etKanan = binding.etKanan;
         etFrekuensi = binding.etFrekuensi;
+
+        kuartil.add(0f);
+        kuartil.add(0f);
+        kuartil.add(0f);
+
+        imgMore.setOnClickListener(v -> {
+            final Dialog dialog = new Dialog(this.getContext());
+            dialog.setContentView(R.layout.result_layout);
+            dialog.setCancelable(true);
+
+            final TextView tvDialogMean = dialog.findViewById(R.id.txtMean);
+            final TextView tvDialogMedian = dialog.findViewById(R.id.txtMedian);
+            final TextView tvDialogModus = dialog.findViewById(R.id.txtModus);
+            final TextView tvDialogQ1 = dialog.findViewById(R.id.txtQ1);
+            final TextView tvDialogQ2 = dialog.findViewById(R.id.txtQ2);
+            final TextView tvDialogQ3 = dialog.findViewById(R.id.txtQ3);
+            final TextView tvDesil = dialog.findViewById(R.id.txtDesil);
+            final TextView tvPersentil = dialog.findViewById(R.id.txtPersentil);
+            final Spinner spinner = dialog.findViewById(R.id.spinner);
+            final Spinner spinner2 = dialog.findViewById(R.id.spinner2);
+
+            final ArrayList<Integer> desil = new ArrayList<>();
+            final ArrayList<Integer> persentil = new ArrayList<>();
+            for (int i = 1; i <= 10; i++) desil.add(i);
+            for (int i = 1; i <= 100; i++) persentil.add(i);
+
+            ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this.getContext(),
+                    android.R.layout.simple_spinner_item, desil);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    final int nDesil = (int) parent.getSelectedItem();
+                    final float desil = Operation.hitungDesil(dataModel,nDesil);
+                    tvDesil.setText(Utility.reformatDecimalNum(desil,false));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+            spinner.setAdapter(adapter);
+
+            spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    final int nPersentil = (int) parent.getSelectedItem();
+                    final float persentil = Operation.hitungPersentil(dataModel,nPersentil);
+                    tvPersentil.setText(Utility.reformatDecimalNum(persentil,false));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+            adapter = new ArrayAdapter<>(this.getContext(),
+                    android.R.layout.simple_spinner_item, persentil);
+            spinner2.setAdapter(adapter);
+
+            tvDialogMean.setText(Utility.reformatDecimalNum(mean,false));
+            tvDialogMedian.setText(Utility.reformatDecimalNum(median,false));
+            tvDialogModus.setText(Utility.reformatDecimalNum(modus,false));
+            tvDialogQ1.setText(Utility.reformatDecimalNum(kuartil.get(0),false));
+            tvDialogQ2.setText(Utility.reformatDecimalNum(kuartil.get(1),false));
+            tvDialogQ3.setText(Utility.reformatDecimalNum(kuartil.get(2),false));
+
+            dialog.show();
+        });
 
         btnAdd.setOnClickListener(v -> {
             String etNilaiKiri = etKiri.getText().toString();
@@ -74,8 +160,6 @@ public class KalkulatorFragment extends Fragment {
                 ErrorMsg.snackBar(binding.getRoot().getRootView(),
                         "Masih ada data yang kosong");
             } else {
-                nilaiKiri = Float.parseFloat(etKiri.getText().toString());
-                nilaiKanan = Float.parseFloat(etKanan.getText().toString());
                 frekuensi = Float.parseFloat(etFrekuensi.getText().toString());
                 addData(binding.getRoot().getContext());
                 calculateResult();
@@ -86,39 +170,55 @@ public class KalkulatorFragment extends Fragment {
 
     private void calculateResult() {
         // mean
-        float mean = Operation.hitungMean(xs,jumlahFiXiXs,jumlahFrekuensi);
-        txtMean.setText(Utility.reformatDecimalNum(mean));
+        if (tlDisFre.getChildCount() > 1) {
+            mean = Operation.hitungMean(xs,jumlahFiXiXs,jumlahFrekuensi);
+            txtMean.setText(Utility.reformatDecimalNum(mean,false));
+        }
 
         if (tlDisFre.getChildCount() > 4) {
             // median
             float maxFrekuensi = Utility.getMax(dataModel.getDataFrekuensi());
-            float panjang = 0f;
-            float fk = 0f;
-            float tepiBawah = 0f;
-            float d1 = 0f;
-            float d2 = 0f;
-            boolean isModus = false;
+            float panjang;
+            float fk;
+            float tepiBawah;
+            float d1;
+            float d2;
+
             for (int i = 1; i <= dataModel.getBaris(); i++) {
+                // TODO: 11/24/21 fix cara mendapatkan baris paling bawah
                 if (maxFrekuensi == dataModel.getFrekuensi(i)) {
                     panjang = (dataModel.getNilaiKanan(i) - dataModel.getNilaiKiri(i)) + 1;
                     fk = dataModel.getFk(i-1);
                     frekuensi = dataModel.getFrekuensi(i);
                     tepiBawah = dataModel.getNilaiKiri(i) - 0.5f;
 
+                    // median
+                    median = Operation.hitungMedian(tepiBawah,jumlahFrekuensi,fk,frekuensi,panjang);
+                    txtMedian.setText(Utility.reformatDecimalNum(median,false));
+
+                    // modus
                     if (dataModel.getBaris() > i) {
-                        isModus = true;
                         d1 = maxFrekuensi - dataModel.getFrekuensi(i-1);
                         d2 = maxFrekuensi - dataModel.getFrekuensi(i+1);
+
+                        modus = Operation.hitungModus(tepiBawah,d1,d2,panjang);
+                        txtModus.setText(Utility.reformatDecimalNum(modus,false));
                     }
+
+                    break;
                 }
             }
 
-            float median = Operation.hitungMedian(tepiBawah,jumlahFrekuensi,fk,frekuensi,panjang);
-            txtMedian.setText(Utility.reformatDecimalNum(median));
+            // kuartil 1
+            this.kuartil.clear();
 
-            if (isModus) {
-                float modus = Operation.hitungModus(tepiBawah,d1,d2,panjang);
-                txtModus.setText(Utility.reformatDecimalNum(modus));
+            for (int i = 1; i <= 3; i++) {
+                try {
+                    final float kuartil = Operation.hitungKuartil(dataModel,i);
+                    this.kuartil.add(kuartil);
+                } catch (NullPointerException e) {
+                    this.kuartil.add(0f);
+                }
             }
         }
     }
@@ -158,15 +258,15 @@ public class KalkulatorFragment extends Fragment {
 
         tr_head.addView(createBlankRowData(context));
         tr_head.addView(createBlankRowData(context));
-        tr_head.addView(createRowData(Utility.reformatDecimalNum(jumlahFrekuensi),context));
+        tr_head.addView(createRowData(Utility.reformatDecimalNum(jumlahFrekuensi,true),context));
         tr_head.addView(createBlankRowData(context));
         tr_head.addView(createBlankRowData(context));
         tr_head.addView(createBlankRowData(context));
         tr_head.addView(createBlankRowData(context));
         tr_head.addView(createBlankRowData(context));
         tr_head.addView(createBlankRowData(context));
-        tr_head.addView(createRowData(Utility.reformatDecimalNum(jumlahFiXiXs),context));// fi xi xs
-        tr_head.addView(createRowData(Utility.reformatDecimalNum(jumlahFiXi),context));// fi xi
+        tr_head.addView(createRowData(Utility.reformatDecimalNum(jumlahFiXiXs,true),context));// fi xi xs
+        tr_head.addView(createRowData(Utility.reformatDecimalNum(jumlahFiXi,true),context));// fi xi
 
         tlDisFre.addView(tr_head, new TableLayout.LayoutParams(
                 TableLayout.LayoutParams.MATCH_PARENT,
@@ -249,21 +349,22 @@ public class KalkulatorFragment extends Fragment {
                 switch (j) {
                     case 8:
                         dataModel.replaceXiMinusXs(i, xiMinusXs);
-                        tr_head.addView(createRowData(Utility.reformatDecimalNum(xiMinusXs), context));
+                        tr_head.addView(createRowData(Utility.reformatDecimalNum(xiMinusXs,true), context));
                         break;
                     case 9:
                         dataModel.replaceFiXiXs(i, fiXiXs);
-                        tr_head.addView(createRowData(Utility.reformatDecimalNum(fiXiXs), context));
+                        tr_head.addView(createRowData(Utility.reformatDecimalNum(fiXiXs,true), context));
                         break;
                     case 10:
                         dataModel.replaceFiXi(i, fiTimesXi);
-                        tr_head.addView(createRowData(Utility.reformatDecimalNum(fiTimesXi), context));
+                        tr_head.addView(createRowData(Utility.reformatDecimalNum(fiTimesXi,true), context));
                         break;
                     default:
-                        tr_head.addView(createRowData(Utility.reformatDecimalNum(datas.get(j)), context));
+                        tr_head.addView(createRowData(Utility.reformatDecimalNum(datas.get(j),true), context));
                         break;
                 }
             }
+
             tlDisFre.addView(tr_head, new TableLayout.LayoutParams(
                     TableLayout.LayoutParams.MATCH_PARENT,
                     TableLayout.LayoutParams.WRAP_CONTENT));

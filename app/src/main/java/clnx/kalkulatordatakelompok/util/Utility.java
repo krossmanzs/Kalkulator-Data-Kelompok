@@ -51,11 +51,13 @@ public class Utility {
      * @param number A decimal number. Which we need to reformat
      * @return A reformatted of decimal number
      */
-    public static String reformatDecimalNum(float number) {
-        if(number == (long) number)
+    public static String reformatDecimalNum(float number, boolean showZero) {
+        if ((number == 0f) && !showZero ) {
+          return "-";
+        } else if(number == (long) number)
             return String.format(Locale.getDefault(),"%d",(long)number);
         else
-            return String.format("%s",number);
+            return String.format(Locale.getDefault(),"%s",number);
     }
 
     /**
