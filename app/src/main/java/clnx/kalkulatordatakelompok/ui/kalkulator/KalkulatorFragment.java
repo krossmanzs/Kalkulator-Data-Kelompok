@@ -186,7 +186,6 @@ public class KalkulatorFragment extends Fragment {
 
             for (int i = 1; i <= dataModel.getBaris(); i++) {
                 // TODO: 11/24/21 fix cara mendapatkan baris paling bawah
-                // TODO: 11/24/21 implementasi desil kuartil
                 if (maxFrekuensi == dataModel.getFrekuensi(i)) {
                     panjang = (dataModel.getNilaiKanan(i) - dataModel.getNilaiKiri(i)) + 1;
                     fk = dataModel.getFk(i-1);
@@ -365,9 +364,6 @@ public class KalkulatorFragment extends Fragment {
                         break;
                 }
             }
-
-            // TODO: 11/24/21 nanti di apus yak
-            tr_head.addView(createRowData(String.valueOf(tlDisFre.getChildCount()) , context));
 
             tlDisFre.addView(tr_head, new TableLayout.LayoutParams(
                     TableLayout.LayoutParams.MATCH_PARENT,
