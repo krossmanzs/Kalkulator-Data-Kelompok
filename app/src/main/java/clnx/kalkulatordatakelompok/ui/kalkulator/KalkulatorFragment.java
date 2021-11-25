@@ -114,7 +114,7 @@ public class KalkulatorFragment extends Fragment {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     final int nDesil = (int) parent.getSelectedItem();
                     final float desil = Operation.hitungDesil(dataModel,nDesil);
-                    tvDesil.setText(Utility.reformatDecimalNum(desil));
+                    tvDesil.setText(Utility.reformatDecimalNum(desil,false));
                 }
 
                 @Override
@@ -128,7 +128,7 @@ public class KalkulatorFragment extends Fragment {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     final int nPersentil = (int) parent.getSelectedItem();
                     final float persentil = Operation.hitungPersentil(dataModel,nPersentil);
-                    tvPersentil.setText(Utility.reformatDecimalNum(persentil));
+                    tvPersentil.setText(Utility.reformatDecimalNum(persentil,false));
                 }
 
                 @Override
@@ -141,12 +141,12 @@ public class KalkulatorFragment extends Fragment {
                     android.R.layout.simple_spinner_item, persentil);
             spinner2.setAdapter(adapter);
 
-            tvDialogMean.setText(Utility.reformatDecimalNum(mean));
-            tvDialogMedian.setText(Utility.reformatDecimalNum(median));
-            tvDialogModus.setText(Utility.reformatDecimalNum(modus));
-            tvDialogQ1.setText(Utility.reformatDecimalNum(kuartil.get(0)));
-            tvDialogQ2.setText(Utility.reformatDecimalNum(kuartil.get(1)));
-            tvDialogQ3.setText(Utility.reformatDecimalNum(kuartil.get(2)));
+            tvDialogMean.setText(Utility.reformatDecimalNum(mean,false));
+            tvDialogMedian.setText(Utility.reformatDecimalNum(median,false));
+            tvDialogModus.setText(Utility.reformatDecimalNum(modus,false));
+            tvDialogQ1.setText(Utility.reformatDecimalNum(kuartil.get(0),false));
+            tvDialogQ2.setText(Utility.reformatDecimalNum(kuartil.get(1),false));
+            tvDialogQ3.setText(Utility.reformatDecimalNum(kuartil.get(2),false));
 
             dialog.show();
         });
@@ -172,7 +172,7 @@ public class KalkulatorFragment extends Fragment {
         // mean
         if (tlDisFre.getChildCount() > 1) {
             mean = Operation.hitungMean(xs,jumlahFiXiXs,jumlahFrekuensi);
-            txtMean.setText(Utility.reformatDecimalNum(mean));
+            txtMean.setText(Utility.reformatDecimalNum(mean,false));
         }
 
         if (tlDisFre.getChildCount() > 4) {
@@ -194,7 +194,7 @@ public class KalkulatorFragment extends Fragment {
 
                     // median
                     median = Operation.hitungMedian(tepiBawah,jumlahFrekuensi,fk,frekuensi,panjang);
-                    txtMedian.setText(Utility.reformatDecimalNum(median));
+                    txtMedian.setText(Utility.reformatDecimalNum(median,false));
 
                     // modus
                     if (dataModel.getBaris() > i) {
@@ -202,7 +202,7 @@ public class KalkulatorFragment extends Fragment {
                         d2 = maxFrekuensi - dataModel.getFrekuensi(i+1);
 
                         modus = Operation.hitungModus(tepiBawah,d1,d2,panjang);
-                        txtModus.setText(Utility.reformatDecimalNum(modus));
+                        txtModus.setText(Utility.reformatDecimalNum(modus,false));
                     }
 
                     break;
@@ -258,15 +258,15 @@ public class KalkulatorFragment extends Fragment {
 
         tr_head.addView(createBlankRowData(context));
         tr_head.addView(createBlankRowData(context));
-        tr_head.addView(createRowData(Utility.reformatDecimalNum(jumlahFrekuensi),context));
+        tr_head.addView(createRowData(Utility.reformatDecimalNum(jumlahFrekuensi,true),context));
         tr_head.addView(createBlankRowData(context));
         tr_head.addView(createBlankRowData(context));
         tr_head.addView(createBlankRowData(context));
         tr_head.addView(createBlankRowData(context));
         tr_head.addView(createBlankRowData(context));
         tr_head.addView(createBlankRowData(context));
-        tr_head.addView(createRowData(Utility.reformatDecimalNum(jumlahFiXiXs),context));// fi xi xs
-        tr_head.addView(createRowData(Utility.reformatDecimalNum(jumlahFiXi),context));// fi xi
+        tr_head.addView(createRowData(Utility.reformatDecimalNum(jumlahFiXiXs,true),context));// fi xi xs
+        tr_head.addView(createRowData(Utility.reformatDecimalNum(jumlahFiXi,true),context));// fi xi
 
         tlDisFre.addView(tr_head, new TableLayout.LayoutParams(
                 TableLayout.LayoutParams.MATCH_PARENT,
@@ -349,18 +349,18 @@ public class KalkulatorFragment extends Fragment {
                 switch (j) {
                     case 8:
                         dataModel.replaceXiMinusXs(i, xiMinusXs);
-                        tr_head.addView(createRowData(Utility.reformatDecimalNum(xiMinusXs), context));
+                        tr_head.addView(createRowData(Utility.reformatDecimalNum(xiMinusXs,true), context));
                         break;
                     case 9:
                         dataModel.replaceFiXiXs(i, fiXiXs);
-                        tr_head.addView(createRowData(Utility.reformatDecimalNum(fiXiXs), context));
+                        tr_head.addView(createRowData(Utility.reformatDecimalNum(fiXiXs,true), context));
                         break;
                     case 10:
                         dataModel.replaceFiXi(i, fiTimesXi);
-                        tr_head.addView(createRowData(Utility.reformatDecimalNum(fiTimesXi), context));
+                        tr_head.addView(createRowData(Utility.reformatDecimalNum(fiTimesXi,true), context));
                         break;
                     default:
-                        tr_head.addView(createRowData(Utility.reformatDecimalNum(datas.get(j)), context));
+                        tr_head.addView(createRowData(Utility.reformatDecimalNum(datas.get(j),true), context));
                         break;
                 }
             }
