@@ -116,87 +116,135 @@ public class Operation {
      *                                fi
      *
      *
-     * @param quartil untuk menentukan kuartil ke-berapa
-     * @param tb tepi bawah
-     * @param n jumlah frekuensi
-     * @param fk frekuensi kumulatif sebelum kelas quartil
-     * @param fi frekuensi pada kelas quartil
-     * @param p panjang kelas
+     * @param kuartil untuk menentukan kuartil ke-berapa
      * @return hasil nilai quartil ke berapa dari yang ditentukan
      */
-    public static float hitungKuartil(int quartil, float tb,
-                                      float n, float fk, float fi, float p) {
+    public static float hitungKuartil(DataModel dataModel, int kuartil) {
+        try {
+            final Map<String,Float> dataDesil = getDatakelasKuartil(dataModel, kuartil);
 
-        final float jumlahFrek = ((float) quartil / 4f) * n;
+            final float tb = dataDesil.get("tb");
+            final float fk = dataDesil.get("fk");
+            final float fi = dataDesil.get("fi");
+            final float p = dataDesil.get("panjang");
+            final float n = dataModel.getFk(dataModel.getBaris());
 
-        return tb + ((jumlahFrek - fk) / fi) * p;
+            final float jumlahFrek = ((float) kuartil / 4f) * n;
+
+            return tb + ((jumlahFrek - fk) / fi) * p;
+        } catch (NullPointerException e) {
+            return 0f;
+        }
+    }
+
+    private static Map<String,Float> getDatakelasKuartil(DataModel dataModel, int kuartil) {
+        final Map<String,Float> dataKelasKuartil = new HashMap<>();
+
+        final float n = dataModel.getFk(dataModel.getBaris()); // mendapatkan jumlah frekuensi
+        final float jumlahFrek = ((float) kuartil / 4f) * n;
+
+        for (int i = 1; i <= dataModel.getBaris(); i++) {
+            if (dataModel.getFk(i) >= jumlahFrek) {
+                dataKelasKuartil.put("tb",dataModel.getNilaiKiri(i) - 0.5f);
+                dataKelasKuartil.put("fk",dataModel.getFk(i-1));
+                dataKelasKuartil.put("fi",dataModel.getFrekuensi(i));
+                dataKelasKuartil.put("panjang",dataModel.getNilaiKanan(i) - dataModel.getNilaiKiri(i) + 1 );
+                break;
+            }
+        }
+
+        return dataKelasKuartil;
     }
 
     /**
-     * Metode ini berfungsi untuk menghitung nilai kuartil 1 - 4.
+     * Metode ini berfungsi untuk menghitung nilai desil 1 - 10.
      * Rumus:
      *
      *                              1
-     *                             --- n - fk
-     *                              4
-     *          quartil(1) = Tb + ----------- x p
+     *                             ---- n - fk
+     *                              10
+     *          desil(1) = Tb + ----------- x p
      *                                fi
      *
      *
      * @param desil untuk menentukan desil ke-berapa
-     * @param tb tepi bawah
-     * @param n jumlah frekuensi
-     * @param fk frekuensi kumulatif sebelum kelas desil
-     * @param fi frekuensi pada kelas desil
-     * @param p panjang kelas
+     * @param dataModel adalah data pada tabel
      * @return hasil perhitungan desil ke berapa dari yang sudah ditentukan
      */
-    public static float hitungDesil(int desil, float tb,
-                                      float n, float fk, float fi, float p) {
-        float jumlahFrek = 0f;
+    public static float hitungDesil(DataModel dataModel, int desil) {
+        try {
+            final Map<String,Float> dataDesil = getDataKelasDesil(dataModel, desil);
 
-        switch (desil) {
-            case 1:
-                jumlahFrek = (1f/10f)/(float) n;
-                break;
-            case 2:
-                jumlahFrek = (2f/10f)/(float) n;
-                break;
-            case 3:
-                jumlahFrek = (3f/10f)/(float) n;
-                break;
-            case 4:
-                jumlahFrek = (4f/10f)/(float) n;
-                break;
-            case 5:
-                jumlahFrek = (5f/10f)/(float) n;
-                break;
-            case 6:
-                jumlahFrek = (6f/10f)/(float) n;
-                break;
-            case 7:
-                jumlahFrek = (7f/10f)/(float) n;
-                break;
-            case 8:
-                jumlahFrek = (8f/10f)/(float) n;
-                break;
-            case 9:
-                jumlahFrek = (9f/10f)/(float) n;
-                break;
-            case 10:
-                jumlahFrek = (1.0f)/(float) n;
-                break;
+            final float tb = dataDesil.get("tb");
+            final float fk = dataDesil.get("fk");
+            final float fi = dataDesil.get("fi");
+            final float p = dataDesil.get("panjang");
+            final float n = dataModel.getFk(dataModel.getBaris());
+
+            final float jumlahFrek = ((float) desil / 10f) * n;
+
+            return tb + ((jumlahFrek - fk) / fi) * p;
+        } catch (NullPointerException e) {
+            return 0f;
         }
-
-        return tb + ((jumlahFrek - fk) / fi) * p;
     }
 
-    public static Map<String,Float> getDatakelasKuartil(DataModel dataModel, int kuartil) {
-
+    private static Map<String,Float> getDataKelasDesil(DataModel dataModel, int desil) {
         final Map<String,Float> dataKelasKuartil = new HashMap<>();
 
-        float n = dataModel.getFk(dataModel.getBaris()); // mendapatkan jumlah frekuensi
-        final float jumlahFrek = ((float) kuartil / 4f) * n;
+        final float n = dataModel.getFk(dataModel.getBaris());
+        final float jumlahFrek = ((float) desil / 10f) * n;
+
+        for (int i = 1; i <= dataModel.getBaris(); i++) {
+            if (dataModel.getFk(i) >= jumlahFrek) {
+                dataKelasKuartil.put("tb",dataModel.getNilaiKiri(i) - 0.5f);
+                dataKelasKuartil.put("fk",dataModel.getFk(i-1));
+                dataKelasKuartil.put("fi",dataModel.getFrekuensi(i));
+                dataKelasKuartil.put("panjang",dataModel.getNilaiKanan(i) - dataModel.getNilaiKiri(i) + 1 );
+                break;
+            }
+        }
+
+        return dataKelasKuartil;
+    }
+
+    /**
+     * Metode ini berfungsi untuk menghitung nilai persentil 1 - 100.
+     * Rumus:
+     *
+     *                              1
+     *                             --- n - fk
+     *                             100
+     *          persentil(1) = Tb + ----------- x p
+     *                                fi
+     *
+     *
+     * @param persentil untuk menentukan persentil ke-berapa
+     * @return hasil perhitungan persentil ke berapa dari yang sudah ditentukan
+     */
+    public static float hitungPersentil(DataModel dataModel, int persentil) {
+        try {
+            final Map<String,Float> dataPersentil = getDataKelasPersentil(dataModel, persentil);
+
+            final float tb = dataPersentil.get("tb");
+            final float fk = dataPersentil.get("fk");
+            final float fi = dataPersentil.get("fi");
+            final float p = dataPersentil.get("panjang");
+            final float n = dataModel.getFk(dataModel.getBaris());
+
+            final float jumlahFrek = ((float) persentil / 100f) * n;
+
+            return tb + ((jumlahFrek - fk) / fi) * p;
+        } catch (NullPointerException e) {
+            return 0f;
+        }
+    }
+
+    private static Map<String,Float> getDataKelasPersentil(DataModel dataModel, int persentil) {
+        final Map<String,Float> dataKelasKuartil = new HashMap<>();
+
+        final float n = dataModel.getFk(dataModel.getBaris()); // mendapatkan jumlah frekuensi
+        final float jumlahFrek = ((float) persentil / 100f) * n;
 
         for (int i = 1; i <= dataModel.getBaris(); i++) {
             if (dataModel.getFk(i) >= jumlahFrek) {
