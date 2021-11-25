@@ -10,7 +10,7 @@ Sebuah aplikasi kalkulator berbasis Android untuk menghitung mean, modus, dan me
 
 ## Kegunaan
 
-* Menghitung mean, median, dan modus
+* Menghitung mean, median, modus, kuartil, persentil, dan desil dari tabel data frekuensi
 
 ## Instalasi
 1. Silahkan download apknya [Disini](https://github.com/krossmanzs/Kalkulator-Data-Kelompok/releases).
